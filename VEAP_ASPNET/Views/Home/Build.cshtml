@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>构建项目</title>
+</head>
+<body>
+    <h2>项目名称：<span id="project_name">webplayer_test</span></h2>
+    <h3>GIT地址：<span id="git_url">https://github.com/tianjihx/webplayer_test.git</span></h3>
+    <button id="beginStructBtn" class="btn">开始构建</button>
+    <button id="createServerBtn" class="btn">创建服务器</button>
+    <button id="showLogBtn" class="btn">测试</button>
+    <div id="log"></div>
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/socket.io.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            function log(str) {
+                $('#log').html($('#log').html() + str + "</br>");
+            }
+
+            $('#beginStructBtn').click(function () {
+                var git_url = $('#git_url').text();
+                var project_name = $('#project_name').text();
+                $.getJSON("/api/GetProject", { url: git_url, name: project_name }, function (json) {
+                    $('#log').html($('#log').html() + json + "</br>");
+                    console.log(json);
+                    if (json.status) {
+                        $('#log').html($('#log').html() + "</br>拉取项目源码成功！");
+                    } else {
+                        $('#log').html($('#log').html() + "</br>拉取项目源码失败！失败原因：" + json.data.msg);
+                    }
+                });
+
+            });
+
+            $("#createServerBtn").click(function () {
+                log('create socket server');
+
+                $.getJSON("/api/Test", {cmd: "0"}, function (json) {
+                    log('socket server created.')
+                    var client = new WebSocket("ws://localhost:8181");
+                    client.onmessage = function (event) {
+                        log(event.data);
+                    };
+                });
+            });
+
+            $("#showLogBtn").click(function () {
+                log('get log');
+                $.getJSON("/api/Test", { cmd: "1" }, function (json) {
+                    log('log showing')
+                });
+            });
+
+        });
+
+    </script>
+</body>
+
+
+
+</html>
