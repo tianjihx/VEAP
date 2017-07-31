@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using VEAP_ASPNET.Utils;
 
 namespace VEAP_ASPNET
 {
@@ -16,9 +17,11 @@ namespace VEAP_ASPNET
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            LogServer.Instance.Init();
         }
     }
 }

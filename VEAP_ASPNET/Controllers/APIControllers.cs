@@ -10,44 +10,34 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Http;
+using System.Web.Http.Results;
+using VEAP_ASPNET.Utils;
 
 namespace VEAP_ASPNET.Controllers
 {
-    public class GetProjectController : ApiController
+    public class BuildController : ApiController
     {
-        // GET: api/Build/5
-        public string Get(string url, string name, string systemType = "git")
+        // GET: api/Build/GetProject
+        public JsonResult<JReturn> GetProject(string url, string name, string systemType = "git")
         {
             string projectPath = $"{HttpRuntime.AppDomainAppPath}TempFiles/{name}";
             string logPath = $"{projectPath}/git_log.txt";
-            string srcPath = $"{projectPath}/src";
+            string savePath = $"{projectPath}/src";
             Debug.WriteLine(projectPath);
             try
             {
-                if (Directory.Exists(projectPath))
-                {
-                    Directory.Delete(projectPath, true);
-                }
-                Directory.CreateDirectory(projectPath);
-                if (File.Exists(logPath))
-                {
-                    File.Delete(logPath);
-                }
-                TextWriter tw = new StreamWriter(new FileStream(logPath, System.IO.FileMode.CreateNew));
-                TextProgressMonitor monitor = new TextProgressMonitor(tw);
-                CloneCommand cmd = Git.CloneRepository()
-                    .SetURI(url)
-                    .SetDirectory(srcPath)
-                    .SetProgressMonitor(monitor);
-                cmd.Call();
-                tw.Close();
+                Tool.CreateNewDirectory(projectPath);
+                Command.GitClone(url, savePath, logPath);
             }
             catch (Exception e)
             {
-                return e.Message + e.StackTrace;
+                return Json(JReturn.Error(e.Message));
+                throw;
             }
-            return "yes";
+            
+            return Json(JReturn.Success);
         }
     }
 

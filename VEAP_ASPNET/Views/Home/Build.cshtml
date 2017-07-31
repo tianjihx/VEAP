@@ -17,6 +17,7 @@
         $(document).ready(function () {
 
             function log(str) {
+                console.log(str);
                 $('#log').html($('#log').html() + str + "</br>");
             }
 
@@ -48,11 +49,56 @@
             });
 
             $("#showLogBtn").click(function () {
-                log('get log');
-                $.getJSON("/api/Test", { cmd: "1" }, function (json) {
-                    log('log showing')
-                });
+                g_client = new WebSocket("ws://localhost:8181");
+                log("connect to log server...");
+                g_client.onopen = function (event) {
+                    log("opened");
+                };
+                g_client.onmessage = function (event) {
+                    
+                    var data = JSON.parse(event.data.replace(/\\r/g, "</br>").replace(/\\n/g, "</br>"));
+                    switch (data.tag) {
+                        case "ready":
+                            socketId = data.socketId;
+                            getLog("request_git", $('#project_name').text());
+                            break;
+                        case "log":
+                            blockGot++;
+                            var receiveLength = data.addition;
+
+                            log(receiveLength);
+                            log(data.content);
+                            if (receiveLength >= blockSize - 1) {
+                                getLog("request_git", $('#project_name').text());
+
+                            } else {
+                                log("finish");
+                            }
+                            
+                            break;
+                        default:
+                            log("wrong tag");
+                    }
+                };
+                
             });
+
+            var g_client;
+            var socketId;
+            const blockSize = 256;
+            var blockGot = 0;
+            function getLog(tag, projectName) {
+                var sendData = {
+                    socketId: socketId,
+                    tag: tag,
+                    content: {
+                        projectName: projectName,
+                        start: blockGot * blockSize,
+                        count: blockSize
+                    }
+                }
+                g_client.send(JSON.stringify(sendData));
+            }
 
         });
 
