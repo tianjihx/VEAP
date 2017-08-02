@@ -21,6 +21,7 @@ namespace VEAP_ASPNET
                 defaults: new { id = RouteParameter.Optional }
             );
 
+
             LogServer.Instance.Init();
         }
     }

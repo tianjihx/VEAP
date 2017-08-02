@@ -7,6 +7,11 @@ using VEAP_ASPNET.Utils;
 using VEAP_ASPNET.Controllers;
 using System.Web;
 using System.Threading;
+using VEAP_ASPNET.Models;
+using System.Data.SQLite;
+using System.Data;
+using Dapper;
+using System.Dynamic;
 
 namespace Test
 {
@@ -22,19 +27,15 @@ namespace Test
             Log.Info(projectPath);
             try
             {
-                //Tool.CreateNewDirectory(projectPath);
-                //Command.GitClone(git_url, srcPath, logPath);
-                //Log.InfoReplace(Command.GetLogContent(logPath, 0, 10240), "\r", "\n");
-                Log.Info("Yes");
-                LogServer.Instance.Init();
+
+                var projects = DAO.GetProjectByUserId(1);
+                dynamic JsonData = new ExpandoObject();
+                JsonData.Projects = Tool.DapperRows2JsonArrayString(projects);
+                Debug.Log(Tool.DapperRows2JsonArrayString(projects));
             }
             catch (Exception e)
             {
                 Log.Info(e.Message);
-            }
-            while (true)
-            {
-
             }
         }
 

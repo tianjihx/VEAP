@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Dashboard | Klorofil - Free Bootstrap Dashboard Template</title>
+    <title>@ViewBag.Title</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -112,7 +112,7 @@
             <!-- MAIN CONTENT -->
             <div class="main-content">
                 <div class="container-fluid">
-                    @RenderBody();
+                    @RenderBody()
                 </div>
             </div>
             <!-- END MAIN CONTENT -->
@@ -127,10 +127,10 @@
     </div>
     <!-- END WRAPPER -->
     <!-- Javascript -->
-    @Scripts.Render("~/assets/vendor/jquery/jquery.min.js");
-    @Scripts.Render("~/assets/vendor/bootstrap/js/bootstrap.min.js");
-    @Scripts.Render("~/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js");
-    @Scripts.Render("~/assets/scripts/klorofil-common.js");
+    @Scripts.Render("~/assets/vendor/jquery/jquery.min.js")
+    @Scripts.Render("~/assets/vendor/bootstrap/js/bootstrap.min.js")
+    @Scripts.Render("~/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js")
+    @Scripts.Render("~/assets/scripts/klorofil-common.js")
 
     <script>
 	$(function() {

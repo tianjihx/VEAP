@@ -56,7 +56,7 @@ namespace VEAP_ASPNET.Utils
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.StackTrace);
+                Debug.Log(e.StackTrace);
                 throw e;
             }
             

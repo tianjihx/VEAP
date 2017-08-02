@@ -3,7 +3,6 @@ using NGit;
 using NGit.Api;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,7 +16,7 @@ using VEAP_ASPNET.Utils;
 
 namespace VEAP_ASPNET.Controllers
 {
-    public class BuildController : ApiController
+    public class BuildAPIController : ApiController
     {
         // GET: api/Build/GetProject
         public JsonResult<JReturn> GetProject(string url, string name, string systemType = "git")
@@ -25,7 +24,7 @@ namespace VEAP_ASPNET.Controllers
             string projectPath = $"{HttpRuntime.AppDomainAppPath}TempFiles/{name}";
             string logPath = $"{projectPath}/git_log.txt";
             string savePath = $"{projectPath}/src";
-            Debug.WriteLine(projectPath);
+            Debug.Log(projectPath);
             try
             {
                 Tool.CreateNewDirectory(projectPath);
@@ -52,7 +51,7 @@ namespace VEAP_ASPNET.Controllers
         {
             if (cmd == "0")
             {
-                Debug.WriteLine("创建服务器");
+                Debug.Log("创建服务器");
                 server.Start(socket =>
                 {
                     allsockets.Add(socket);
@@ -64,7 +63,7 @@ namespace VEAP_ASPNET.Controllers
             }
             else if (cmd == "1")
             {
-                Debug.WriteLine("获取log");
+                Debug.Log("获取log");
                 Thread t1 = new Thread(new ParameterizedThreadStart(TestMethod));
                 t1.Start();
             }
@@ -74,11 +73,11 @@ namespace VEAP_ASPNET.Controllers
 
         void TestMethod(object socketObj)
         {
-            Debug.WriteLine("线程创建");
-            Debug.WriteLine($"一共有{allsockets.Count}个client");
+            Debug.Log("线程创建");
+            Debug.Log($"一共有{allsockets.Count}个client");
             for (int i = 0; i < 10; ++i)
             {
-                Debug.WriteLine(i);
+                Debug.Log(i);
                 foreach (var socket in allsockets)
                 {
                     socket.Send("hello " + i.ToString());

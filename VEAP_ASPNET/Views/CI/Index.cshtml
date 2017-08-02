@@ -1,0 +1,92 @@
+﻿@Scripts.Render("~/Scripts/vue.min.js")
+
+<h3>我参与的项目</h3>
+
+
+<div id="app">
+    {{ message }}
+</div>
+
+<div id="app2">
+    <div v-for="proj in projects">
+        {{ proj.Name }}
+    </div>
+</div>
+
+<div class="panel panel-headline">
+    <div class="panel-heading">
+        <div>
+            <h3 class="panel-title">项目名称</h3>
+            <p class="panel-subtitle">项目GIT地址</p>
+        </div>
+        <div class="right">
+            <button><i class="lnr lnr-lighter"></i>构建项目</button>
+        </div>
+    </div>
+    
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-download"></i></span>
+                    <p>
+                        <span class="number">1,252</span>
+                        <span class="title">Downloads</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-shopping-bag"></i></span>
+                    <p>
+                        <span class="number">203</span>
+                        <span class="title">Sales</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-eye"></i></span>
+                    <p>
+                        <span class="number">274,678</span>
+                        <span class="title">Visits</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-bar-chart"></i></span>
+                    <p>
+                        <span class="number">35%</span>
+                        <span class="title">Conversions</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+
+
+</div>
+
+<script>
+    var serverdata_projects = JSON.parse('@Html.Raw(@ViewBag.JsonData.Projects)');
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!'
+        }
+    });
+
+    var app2 = new Vue({
+        el: '#app2',
+        data: {
+            projects: serverdata_projects
+        }
+    });
+
+</script>
+<br/>
