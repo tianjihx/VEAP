@@ -16,14 +16,33 @@ namespace VEAP_ASPNET.Utils
         {
             try
             {
-                TextWriter tw = new StreamWriter(new FileStream(logPath, System.IO.FileMode.Create), Encoding.UTF8);
-                TextProgressMonitor monitor = new TextProgressMonitor(tw);
-                CloneCommand cmd = Git.CloneRepository()
-                    .SetURI(url)
-                    .SetDirectory(savePath)
-                    .SetProgressMonitor(monitor);
-                cmd.Call();
-                tw.Close();
+                //TextWriter tw = new StreamWriter(new FileStream(logPath, System.IO.FileMode.Create), Encoding.UTF8);
+                //TextProgressMonitor monitor = new TextProgressMonitor(tw);
+                //CloneCommand cmd = Git.CloneRepository()
+                //    .SetURI(url)
+                //    .SetDirectory(savePath)
+                //    .SetProgressMonitor(monitor);
+                //cmd.Call();
+                //cmd.GetRepository().Close();
+                //tw.Close();
+
+                Process p = new Process();
+                p.StartInfo.FileName = "C:/Program Files/Git/bin/git.exe";
+                p.StartInfo.Arguments = $"clone {url} \"{savePath}\"";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+                p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+                p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+                p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+                p.Start();//启动程序
+
+                string errorLog = p.StandardError.ReadToEnd();
+                string outputLog = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+                p.Close();
+                Debug.Log(errorLog);
+                Debug.Log(outputLog);
+
             }
             catch (Exception e)
             {

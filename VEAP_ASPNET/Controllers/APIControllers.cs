@@ -32,6 +32,7 @@ namespace VEAP_ASPNET.Controllers
             }
             catch (Exception e)
             {
+                Debug.Log(e.Message + e.StackTrace);
                 return Json(JReturn.Error(e.Message));
                 throw;
             }

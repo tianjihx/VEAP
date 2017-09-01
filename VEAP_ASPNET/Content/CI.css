@@ -1,0 +1,14 @@
+﻿.project-panel {
+    box-shadow: rgba(161, 161, 161, 0.61) 2px 0px 8px 1px;
+    padding-top: 5px;
+    padding-right: 25px;
+    padding-bottom: 5px;
+    padding-left: 25px;
+    background-image: linear-gradient(rgb(228, 228, 228), rgb(228, 228, 228));
+    margin-top: 20px;
+}
+
+.build-button {
+    margin-top: 20px;
+    margin-right: 20px;
+}

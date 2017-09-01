@@ -1,93 +1,86 @@
-﻿@Scripts.Render("~/Scripts/vue.min.js")
+﻿@Styles.Render("~/Content/common.css")
+@Styles.Render("~/Content/CI.css")
 
-<h3>我参与的项目</h3>
-<p>lalaal</p>
+<div class="page-container">
 
 
-<div id="app">
-    {{ message }}
-</div>
 
-<div id="app2">
-    <div v-for="proj in projects">
-        {{ proj.Name }}
-    </div>
-</div>
+    <div id="ProjectPanels">
+        <div v-for="proj in projects">
+            
 
-<div class="panel panel-headline">
-    <div class="panel-heading">
-        <div>
-            <h3 class="panel-title">项目名称</h3>
-            <p class="panel-subtitle">项目GIT地址</p>
         </div>
-        <div class="right">
-            <button><i class="lnr lnr-lighter"></i>构建项目</button>
+
+        <div class="project-panel" v-for="proj in projects">
+            <div class="">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>{{ proj.Name }}</h2>
+                        <p>{{ proj.VcsUrl }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <button v-on:click="BuildProject(proj.Name, proj.VcsUrl)" class="pull-right btn btn-info btn-lg build-button">构建项目</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="row">
+                    <div class="col-md-4">
+                        代码库
+                    </div>
+                    <div class="col-md-4">
+                        Unity
+                    </div>
+                    <div class="col-md-4">
+                        测试
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
+
+
     
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="metric">
-                    <span class="icon"><i class="fa fa-download"></i></span>
-                    <p>
-                        <span class="number">1,252</span>
-                        <span class="title">Downloads</span>
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="metric">
-                    <span class="icon"><i class="fa fa-shopping-bag"></i></span>
-                    <p>
-                        <span class="number">203</span>
-                        <span class="title">Sales</span>
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="metric">
-                    <span class="icon"><i class="fa fa-eye"></i></span>
-                    <p>
-                        <span class="number">274,678</span>
-                        <span class="title">Visits</span>
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="metric">
-                    <span class="icon"><i class="fa fa-bar-chart"></i></span>
-                    <p>
-                        <span class="number">35%</span>
-                        <span class="title">Conversions</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div>
-
+    
 
 </div>
+
+@Scripts.Render("~/Scripts/vue.min.js")
+@Scripts.Render("~/Scripts/axios.min.js")
 
 <script>
     var serverdata_projects = JSON.parse('@Html.Raw(@ViewBag.JsonData.Projects)');
 
-    var app = new Vue({
-        el: '#app',
-        data: {
-            message: 'Hello Vue!'
-        }
-    });
 
     var app2 = new Vue({
-        el: '#app2',
+        el: '#ProjectPanels',
         data: {
-            projects: serverdata_projects
+            projects: serverdata_projects,
+            BuildProject: function (name, url) {
+                // 拉取项目代码
+                axios.get('/api/BuildAPI/GetProject', {
+                    params: {
+                        url: url,
+                        name: name
+                    }
+                })
+                    .then(function (response) {
+                        console.log(response.data);
+                        if (response.data.status) {
+                            alert('success');
+                        } else {
+                            alert(response.data.errMsg);
+                        }
+                    })
+                    .catch(function (error) {
+                        alert(error)
+                    });
+            }
         }
     });
 
 </script>
-<br/>
